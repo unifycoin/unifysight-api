@@ -25,14 +25,14 @@ if (process.env.INSIGHT_NETWORK === 'livenet') {
   env = 'livenet';
   db = home;
   port = '3000';
-  b_port = '45443';
-  p2p_port = '45444';
+  b_port = '8649';
+  p2p_port = '18649';
 } else {
   env = 'testnet';
   db = home + '/testnet';
   port = '3001';
-  b_port = '55443';
-  p2p_port = '55444';
+  b_port = '8650';
+  p2p_port = '28649';
 }
 port = parseInt(process.env.INSIGHT_PORT) || port;
 
@@ -68,8 +68,8 @@ var ignoreCache = process.env.INSIGHT_IGNORE_CACHE || 0;
 
 var bitcoindConf = {
   protocol: process.env.BITCOIND_PROTO || 'http',
-  user: process.env.BITCOIND_USER || 'user',
-  pass: process.env.BITCOIND_PASS || 'pass',
+  user: process.env.BITCOIND_USER || 'unifycoin',
+  pass: process.env.BITCOIND_PASS || 'local321',
   host: process.env.BITCOIND_HOST || '127.0.0.1',
   port: process.env.BITCOIND_PORT || b_port,
   p2pPort: process.env.BITCOIND_P2P_PORT || p2p_port,
