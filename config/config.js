@@ -49,7 +49,7 @@ switch (process.env.NODE_ENV) {
     break;
 }
 
-var network = process.env.INSIGHT_NETWORK || 'testnet';
+var network = process.env.INSIGHT_NETWORK || 'livenet';
 
 var dataDir = process.env.BITCOIND_DATADIR;
 var isWin = /^win/.test(process.platform);
