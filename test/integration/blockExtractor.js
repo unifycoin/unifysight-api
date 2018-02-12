@@ -8,8 +8,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var assert        = require('assert'),
   config          = require('../../config/config'),
   BlockExtractor  = require('../../lib/BlockExtractor'),
-  networks        = require('potcore/networks'),
-  util            =  require('potcore/util/util');
+  networks        = require('unifycore/networks'),
+  util            =  require('unifycore/util/util');
 
 var should = require('chai');
 //var txItemsValid = JSON.parse(fs.readFileSync('test/model/txitems.json'));

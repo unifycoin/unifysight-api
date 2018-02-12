@@ -1,24 +1,24 @@
-# *Potsight API*
+# *Unifysight API*
 
-*Potsight API* is an open-source Potcoin blockchain REST
-and websocket API. Potsight API runs in NodeJS and uses LevelDB for storage. 
+*Unifysight API* is an open-source Unifycoin blockchain REST
+and websocket API. Unifysight API runs in NodeJS and uses LevelDB for storage. 
 
 This is a backend-only service. If you're looking for a web frontend application,
-take a look at our official blockchain explorer [Potsight](https://github.com/potcoin/potsight).
+take a look at our official blockchain explorer [Unifysight](https://github.com/unifycoin/unifysight).
 
-*Potsight API* allows everyone to develop Potcoin-related applications (such as wallets) that 
-require certain information from the blockchain that potcoind does not provide.
+*Unifysight API* allows everyone to develop Unifycoin-related applications (such as wallets) that 
+require certain information from the blockchain that unifycoind does not provide.
 
 
 ## Prerequisites
 
-* **potcoind** - Download and install [Potcoin](https://github.com/potcoin/potcoin).
+* **unifycoind** - Download and install [Unifycoin](https://github.com/unifycoin/unifycoin).
 
-*Potsight API* needs a *trusted* potcoind node to run. *Potsight API* will connect to the node
-through the RPC API, Potcoin peer-to-peer protocol, and will even read its raw block .dat files for syncing.
+*Unifysight API* needs a *trusted* unifycoind node to run. *Unifysight API* will connect to the node
+through the RPC API, Unifycoin peer-to-peer protocol, and will even read its raw block .dat files for syncing.
 
-Configure potcoind to listen to RPC calls and set `txindex` to true. potcoind must be running and must have
-finished downloading the blockchain **before** running *Potsight API*.
+Configure unifycoind to listen to RPC calls and set `txindex` to true. unifycoind must be running and must have
+finished downloading the blockchain **before** running *Unifysight API*.
 
 * **Node.js v0.10.x** - Download and Install [Node.js](http://www.nodejs.org/download/).
 
@@ -28,9 +28,9 @@ finished downloading the blockchain **before** running *Potsight API*.
 ## Quick Install
   Check the Prerequisites section above before installing.
 
-  To install *Potsight API*, clone the main repository:
+  To install *Unifysight API*, clone the main repository:
 
-    $ git clone https://github.com/potcoin/potsight-api.git && cd potsight-api
+    $ git clone https://github.com/unifycoin/unifysight-api.git && cd unifysight-api
 
   Install dependencies:
 
@@ -56,16 +56,16 @@ There you can specify your application name and database name. Certain configura
 variables if they are defined:
 
 ```
-BITCOIND_HOST         # RPC potcoind host
-BITCOIND_PORT         # RPC potcoind Port
-BITCOIND_P2P_HOST     # P2P potcoind Host (will default to BITCOIND_HOST, if specified)
-BITCOIND_P2P_PORT     # P2P potcoind Port
+BITCOIND_HOST         # RPC unifycoind host
+BITCOIND_PORT         # RPC unifycoind Port
+BITCOIND_P2P_HOST     # P2P unifycoind Host (will default to BITCOIND_HOST, if specified)
+BITCOIND_P2P_PORT     # P2P unifycoind Port
 BITCOIND_USER         # RPC username
 BITCOIND_PASS         # RPC password
-BITCOIND_DATADIR      # potcoind datadir. 'testnet' will be appended automatically if testnet is used. NEED to finish with '/'. e.g: `/vol/data/`
+BITCOIND_DATADIR      # unifycoind datadir. 'testnet' will be appended automatically if testnet is used. NEED to finish with '/'. e.g: `/vol/data/`
 INSIGHT_NETWORK [= 'livenet' | 'testnet']
 INSIGHT_PORT          # insight api port
-INSIGHT_DB            # Path where to store the internal DB. (defaults to $HOME/.potsight)
+INSIGHT_DB            # Path where to store the internal DB. (defaults to $HOME/.unifysight)
 INSIGHT_SAFE_CONFIRMATIONS=6  # Nr. of confirmation needed to start caching transaction information   
 INSIGHT_IGNORE_CACHE  # True to ignore cache of spents in transaction, with more than INSIGHT_SAFE_CONFIRMATIONS confirmations. This is useful for tracking double spents for old transactions.
 ENABLE_MAILBOX # if "true" will enable mailbox plugin
@@ -78,36 +78,36 @@ ENABLE_HTTPS # if "true" it will server using SSL/HTTPS
 
 ```
 
-Make sure that potcoind is configured to [accept incoming connections using 'rpcallowip'](https://en.bitcoin.it/wiki/Running_Bitcoin).
+Make sure that unifycoind is configured to [accept incoming connections using 'rpcallowip'](https://en.bitcoin.it/wiki/Running_Bitcoin).
 
 In case the network is changed (testnet to livenet or vice versa) levelDB database needs to be deleted. This can be performed running:
-```util/sync.js -D``` and waiting for *Potsight API* to synchronize again.  Once the database is deleted,
+```util/sync.js -D``` and waiting for *Unifysight API* to synchronize again.  Once the database is deleted,
 the sync.js process can be safely interrupted (CTRL+C) and continued from the synchronization process embedded in main app.
 
 
 ## Synchronization
 
-The initial synchronization process scans the blockchain from the paired potcoind server to update addresses and balances.
-*potsight-api* needs exactly one trusted potcoind node to run. This node must have finished downloading the blockchain
-before running *potsight-api*.
+The initial synchronization process scans the blockchain from the paired unifycoind server to update addresses and balances.
+*unifysight-api* needs exactly one trusted unifycoind node to run. This node must have finished downloading the blockchain
+before running *unifysight-api*.
 
-While *potsight-api* is synchronizing the website can be accessed (the sync process is embedded in the webserver),
+While *unifysight-api* is synchronizing the website can be accessed (the sync process is embedded in the webserver),
 but there may be missing data or incorrect balances for addresses. The 'sync' status is shown at the `/api/sync` endpoint.
 
-The blockchain can be read from potcoind's raw `.dat` files or RPC interface. 
+The blockchain can be read from unifycoind's raw `.dat` files or RPC interface. 
 Reading the information from the `.dat` files is much faster so it's the
 recommended (and default) alternative. `.dat` files are scanned in the default
-location for each platform (for example, `~/.potcoin` on Linux). In case a
+location for each platform (for example, `~/.unifycoin` on Linux). In case a
 non-standard location is used, it needs to be defined (see the Configuration section).
 
-While synchronizing the blockchain, *potsight-api* listens for new blocks and
-transactions relayed by the potcoind node. Those are also stored on *potsight-api*'s database.
-In case *potsight-api* is shutdown for a period of time, restarting it will trigger
+While synchronizing the blockchain, *unifysight-api* listens for new blocks and
+transactions relayed by the unifycoind node. Those are also stored on *unifysight-api*'s database.
+In case *unifysight-api* is shutdown for a period of time, restarting it will trigger
 a partial (historic) synchronization of the blockchain. Depending on the size of
 that synchronization task, a reverse RPC or forward `.dat` syncing strategy will be used.
 
-If potcoind is shutdown, *potsight-api* needs to be stopped and restarted
-once potcoind is restarted.
+If unifycoind is shutdown, *unifysight-api* needs to be stopped and restarted
+once unifycoind is restarted.
 
 
 ### Syncing old blockchain data manually
@@ -119,23 +119,23 @@ once potcoind is restarted.
   Check util/sync.js --help for options, particularly -D to erase the current DB.
 
   *NOTE*: there is no need to run this manually since the historic synchronization
-  is built in into the web application. Running *potsight-api* normally will trigger
+  is built in into the web application. Running *unifysight-api* normally will trigger
   the historic sync automatically.
 
 
 ### DB storage requirement
 
-To store the blockchain and address related information, *potsight-api* uses LevelDB.
+To store the blockchain and address related information, *unifysight-api* uses LevelDB.
 Two DBs are created: txs and blocks. By default these are stored on
 
-  ``~/.potsight/``
+  ``~/.unifysight/``
 
 This can be changed at config/config.js.
 
 
 ## Development
 
-To run *potsight-api* locally for development with grunt:
+To run *unifysight-api* locally for development with grunt:
 
 ```$ NODE_ENV=development grunt```
 
@@ -144,7 +144,7 @@ To run the tests
 ```$ grunt test```
 
 
-Contributions and suggestions are welcome at [potsight-api github repository](https://github.com/potcoin/potsight-api).
+Contributions and suggestions are welcome at [unifysight-api github repository](https://github.com/unifycoin/unifysight-api).
 
 ## Caching schema
 
@@ -162,7 +162,7 @@ to ignore the cache in a particular API request.
 
 ## API
 
-By default, *potsight-api* provides a REST API at `/api`, but this prefix is configurable from the var `apiPrefix` in the `config.js` file.
+By default, *unifysight-api* provides a REST API at `/api`, but this prefix is configurable from the var `apiPrefix` in the `config.js` file.
 
 The end-points are:
 
@@ -287,7 +287,7 @@ POST response:
   /api/peer
 ```
 
-### Status of the Potcoin network
+### Status of the Unifycoin network
 ```
   /api/status?q=xxx
 ```
@@ -303,7 +303,7 @@ Where "xxx" can be:
 ## Web Socket API
 The web socket API is served using [socket.io](http://socket.io).
 
-The following are the events published by *Potsight API*:
+The following are the events published by *Unifysight API*:
 
 'tx': new transaction received from network. This event is published in the 'inv' room. Data will be a app/models/Transaction object.
 Sample output:
@@ -326,7 +326,7 @@ Sample output:
 }
 ```
 
-'<potcoinAddress>': new transaction concerning <potcoinAddress> received from network. This event is published in the '<potcoinAddress>' room.
+'<unifycoinAddress>': new transaction concerning <unifycoinAddress> received from network. This event is published in the '<unifycoinAddress>' room.
 
 'status': every 1% increment on the sync task, this event will be triggered. This event is published in the 'sync' room.
 
@@ -346,18 +346,18 @@ Sample output:
 
 ### Example Usage
 
-The following html page connects to the socket.io Potsight API and listens for new transactions.
+The following html page connects to the socket.io Unifysight API and listens for new transactions.
 
 html
 ```
 <html>
 <body>
-  <script src="http://live.potcoin.com/socket.io/socket.io.js"></script>
+  <script src="http://live.unifycoin.com/socket.io/socket.io.js"></script>
   <script>
     eventToListenTo = 'tx'
     room = 'inv'
 
-    var socket = io("http://live.potcoin.com/");
+    var socket = io("http://live.unifycoin.com/");
     socket.on('connect', function() {
       // Join the room.
       socket.emit('subscribe', room);

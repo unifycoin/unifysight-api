@@ -1,29 +1,29 @@
 {
-  "name": "potsight-api",
-  "description": "An open-source Potcoin blockchain API. The Potsight API provides you with a convenient, powerful and simple way to query and broadcast data on the bitcoin network and build your own services with it.",
+  "name": "unifysight-api",
+  "description": "An open-source Unifycoin blockchain API. The Unifysight API provides you with a convenient, powerful and simple way to query and broadcast data on the bitcoin network and build your own services with it.",
   "version": "0.2.12",
   "author": {
-    "name": "Potcoin",
-    "email": "info@potcoin.com"
+    "name": "ihook98",
+    "email": "ihook98@outlook.com"
   },
-  "repository": "git://github.com/potcoin/potsight-api.git",
+  "repository": "git://github.com/unifycoin/unifysight-api.git",
   "contributors": [
     {
-      "name": "PC",
-      "email": "dev@potcoin.com"
+      "name": "ihook98",
+      "email": "ihook98@outlook.com"
     }
   ],
   "bugs": {
-    "url": "https://github.com/potcoin/potsight-api/issues"
+    "url": "https://github.com/unifycoin/unifysight-api/issues"
   },
-  "homepage": "https://github.com/potcoin/potsight-api",
+  "homepage": "https://github.com/unifycoin/unifysight-api",
   "license": "MIT",
   "keywords": [
-    "potcoin",
-    "potcore",
-    "potsight",
-    "potsight api",
-    "potcoin api",
+    "unifycoin",
+    "unifycore",
+    "unifysight",
+    "unifysight api",
+    "unifycoin api",
     "insight",
     "insight api",
     "blockchain",
@@ -44,7 +44,7 @@
     "base58-native": "0.1.2",
     "bignum": "*",
     "bitauth": "^0.1.1",
-    "potcore": "git://github.com/potcoin/potcore.git",
+    "unifycore": "git://github.com/unifycoin/unifycore.git",
     "bufferput": "git://github.com/bitpay/node-bufferput.git",
     "buffertools": "*",
     "commander": "^2.3.0",

@@ -6,8 +6,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var assert        = require('assert'),
   config          = require('../config/config'),
   BlockExtractor  = require('../lib/BlockExtractor').class(),
-  networks        = require('potcore/networks'),
-  util            = require('potcore/util/util');
+  networks        = require('unifycore/networks'),
+  util            = require('unifycore/util/util');
 
   var be = new BlockExtractor(config.bitcoind.dataDir, config.network);
   var network = config.network === 'testnet' ? networks.testnet: networks.livenet;

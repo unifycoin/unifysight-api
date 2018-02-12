@@ -19,7 +19,7 @@ function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
-var home = process.env.INSIGHT_DB || (getUserHome() + '/.potsight');
+var home = process.env.INSIGHT_DB || (getUserHome() + '/.unifysight');
 
 if (process.env.INSIGHT_NETWORK === 'livenet') {
   env = 'livenet';
@@ -56,9 +56,9 @@ var isWin = /^win/.test(process.platform);
 var isMac = /^darwin/.test(process.platform);
 var isLinux = /^linux/.test(process.platform);
 if (!dataDir) {
-  if (isWin) dataDir = '%APPDATA%\\Potcoin\\';
-  if (isMac) dataDir = process.env.HOME + '/Library/Application Support/Potcoin/';
-  if (isLinux) dataDir = process.env.HOME + '/.potcoin/';
+  if (isWin) dataDir = '%APPDATA%\\Unifycoin\\';
+  if (isMac) dataDir = process.env.HOME + '/Library/Application Support/Unifycoin/';
+  if (isLinux) dataDir = process.env.HOME + '/.unifycoin/';
 }
 dataDir += network === 'testnet' ? 'testnet' : '';
 
