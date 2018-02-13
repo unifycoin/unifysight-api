@@ -58,7 +58,7 @@ var isLinux = /^linux/.test(process.platform);
 if (!dataDir) {
   if (isWin) dataDir = '%APPDATA%\\Unifycoin\\';
   if (isMac) dataDir = process.env.HOME + '/Library/Application Support/Unifycoin/';
-  if (isLinux) dataDir = process.env.HOME + '/.unifyV2/';
+  if (isLinux) dataDir = process.env.HOME + '/.unifycoin/';
 }
 dataDir += network === 'testnet' ? 'testnet' : '';
 
