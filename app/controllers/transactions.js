@@ -3,25 +3,25 @@
 /**
  * Module dependencies.
  */
-var Address     = require('../models/Address');
-var async       = require('async');
-var common      = require('./common');
-var util        = require('util');
+var Address = require('../models/Address');
+var async = require('async');
+var common = require('./common');
+var util = require('util');
 
-var Rpc           = require('../../lib/Rpc');
+var Rpc = require('../../lib/Rpc');
 
 var tDb = require('../../lib/TransactionDb').default();
 var bdb = require('../../lib/BlockDb').default();
 
-exports.send = function(req, res) {
-  Rpc.sendRawTransaction(req.body.rawtx, function(err, txid) {
+exports.send = function (req, res) {
+  Rpc.sendRawTransaction(req.body.rawtx, function (err, txid) {
     if (err) {
       var message;
-      if(err.code == -25) {
+      if (err.code == -25) {
         message = util.format(
           'Generic error %s (code %s)',
           err.message, err.code);
-      } else if(err.code == -26) {
+      } else if (err.code == -26) {
         message = util.format(
           'Transaction rejected by network (code %s). Reason: %s',
           err.code, err.message);
@@ -30,7 +30,7 @@ exports.send = function(req, res) {
       }
       return res.status(400).send(message);
     }
-    res.json({'txid' : txid});
+    res.json({ 'txid': txid });
   });
 };
 
@@ -38,10 +38,10 @@ exports.send = function(req, res) {
 /**
  * Find transaction by hash ...
  */
-exports.transaction = function(req, res, next, txid) {
+exports.transaction = function (req, res, next, txid) {
 
-  tDb.fromIdWithInfo(txid, function(err, tx) {
-    if (err || ! tx)
+  tDb.fromIdWithInfo(txid, function (err, tx) {
+    if (err || !tx)
       return common.handleErrors(err, res);
     else {
       req.transaction = tx.info;
@@ -54,7 +54,7 @@ exports.transaction = function(req, res, next, txid) {
 /**
  * Show transaction
  */
-exports.show = function(req, res) {
+exports.show = function (req, res) {
 
   if (req.transaction) {
     res.jsonp(req.transaction);
@@ -62,9 +62,9 @@ exports.show = function(req, res) {
 };
 
 
-var getTransaction = function(txid, cb) {
+var getTransaction = function (txid, cb) {
 
-  tDb.fromIdWithInfo(txid, function(err, tx) {
+  tDb.fromIdWithInfo(txid, function (err, tx) {
     if (err) console.log(err);
 
     if (!tx || !tx.info) {
@@ -80,7 +80,7 @@ var getTransaction = function(txid, cb) {
 /**
  * List of transaction
  */
-exports.list = function(req, res, next) {
+exports.list = function (req, res, next) {
   var bId = req.query.block;
   var addrStr = req.query.address;
   var page = req.query.pageNum;
@@ -90,13 +90,13 @@ exports.list = function(req, res, next) {
   var txs;
 
   if (bId) {
-    bdb.fromHashWithInfo(bId, function(err, block) {
+    bdb.fromHashWithInfo(bId, function (err, block) {
       if (err) {
         console.log(err);
         return res.status(500).send('Internal Server Error');
       }
 
-      if (! block) {
+      if (!block) {
         return res.status(404).send('Not found');
       }
 
@@ -111,7 +111,7 @@ exports.list = function(req, res, next) {
         txs = block.info.tx;
       }
 
-      async.mapSeries(txs, getTransaction, function(err, results) {
+      async.mapSeries(txs, getTransaction, function (err, results) {
         if (err) {
           console.log(err);
           res.status(404).send('TX not found');
@@ -127,7 +127,7 @@ exports.list = function(req, res, next) {
   else if (addrStr) {
     var a = new Address(addrStr);
 
-    a.update(function(err) {
+    a.update(function (err) {
       if (err && !a.totalReceivedSat) {
         console.log(err);
         res.status(404).send('Invalid address');
@@ -145,7 +145,7 @@ exports.list = function(req, res, next) {
         txs = a.transactions;
       }
 
-      async.mapSeries(txs, getTransaction, function(err, results) {
+      async.mapSeries(txs, getTransaction, function (err, results) {
         if (err) {
           console.log(err);
           res.status(404).send('TX not found');

@@ -163,7 +163,6 @@ Address.prototype.update = function(next, opts) {
       if (err) return next(err);
 
       tDb.cacheConfirmations(txOut, function(err) {
-// console.log('[Address.js.161:txOut:]',txOut); //TODO
         if (err) return next(err);
         if (opts.onlyUnspent) {
           txOut = txOut.filter(function(x) { return !x.spentTxId; });
