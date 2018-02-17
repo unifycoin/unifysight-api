@@ -25,6 +25,7 @@ module.exports = function(app) {
   app.get(apiPrefix + '/tx/:txid', transactions.show);
   app.param('txid', transactions.transaction);
   app.get(apiPrefix + '/txs', transactions.list);
+  app.get(apiPrefix + '/ranking', transactions.ranking);
   app.post(apiPrefix + '/tx/send', transactions.send);
 
   // Address routes

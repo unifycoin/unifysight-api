@@ -76,6 +76,13 @@ var getTransaction = function (txid, cb) {
   });
 };
 
+exports.ranking = function (req, res, next) {
+  tDb.getRanking(function (ranking, addrs){
+    res.jsonp({
+      ranking: ranking
+    });
+  });
+}
 
 /**
  * List of transaction
