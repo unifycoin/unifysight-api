@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var Address = require('../models/Address');
+var Status = require('../models/Status');
 var async = require('async');
 var common = require('./common');
 var util = require('util');
@@ -77,9 +78,47 @@ var getTransaction = function (txid, cb) {
 };
 
 exports.ranking = function (req, res, next) {
-  tDb.getRanking(function (ranking, addrs){
-    res.jsonp({
-      ranking: ranking
+  var statusObject = new Status();
+  statusObject.getInfo(function (err) {
+    if (err || !statusObject) {
+      console.log(err);
+      return res.status(500).send('Get Status Error');
+    }
+    tDb.getRanking(function (ranking) {
+      var total = parseFloat(statusObject.info.moneysupply);
+      var sum00 = 0, sum01 = 0, sum02 = 0, sum03 = 0;
+      var pc00 = 0, pc01 = 0, pc02 = 0, pc03 = 0;
+      ranking.forEach(function (r) {
+        r.percent = (parseFloat(r.balance) * 100 / total).toFixed(5);
+        if (r.index < 25) {
+          sum00 += parseFloat(r.balance);
+        } else if (r.index < 50) {
+          sum01 += parseFloat(r.balance);
+        } else if (r.index < 75) {
+          sum02 += parseFloat(r.balance);
+        } else if (r.index < 100) {
+          sum03 += parseFloat(r.balance);
+        }
+      });
+      pc00 = sum00 * 100 / total;
+      pc01 = sum01 * 100 / total;
+      pc02 = sum02 * 100 / total;
+      pc03 = sum03 * 100 / total;
+
+      res.jsonp({
+        ranking: ranking,
+        info: {
+          sum00: sum00.toFixed(8),
+          sum01: sum01.toFixed(8),
+          sum02: sum02.toFixed(8),
+          sum03: sum03.toFixed(8),
+          pc00: pc00.toFixed(5),
+          pc01: pc01.toFixed(5),
+          pc02: pc02.toFixed(5),
+          pc03: pc03.toFixed(5),
+          pc: ((sum00 + sum01 + sum02 + sum03) * 100 / total).toFixed(5)
+        }
+      });
     });
   });
 }
