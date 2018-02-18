@@ -104,7 +104,7 @@ exports.ranking = function (req, res, next) {
       pc01 = sum01 * 100 / total;
       pc02 = sum02 * 100 / total;
       pc03 = sum03 * 100 / total;
-
+      ranking.pop();
       res.jsonp({
         ranking: ranking,
         info: {
