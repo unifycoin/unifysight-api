@@ -112,6 +112,7 @@ exports.ranking = function (req, res, next) {
           sum01: sum01.toFixed(8),
           sum02: sum02.toFixed(8),
           sum03: sum03.toFixed(8),
+          sum: (sum00 + sum01 + sum02 + sum03).toFixed(8),
           pc00: pc00.toFixed(5),
           pc01: pc01.toFixed(5),
           pc02: pc02.toFixed(5),
