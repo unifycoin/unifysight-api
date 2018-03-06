@@ -211,3 +211,69 @@ exports.list = function (req, res, next) {
     });
   }
 };
+
+var getAddrs = function (req, res, next) {
+  var as = [];
+  try {
+    var addrStrs = req.param('addrs');
+    var s = addrStrs.split(',');
+    if (s.length === 0) return as;
+    for (var i = 0; i < s.length; i++) {
+      var a = new Address(s[i]);
+      as.push(a);
+    }
+  } catch (e) {
+    common.handleErrors({
+      message: 'Invalid address:' + e.message,
+      code: 1
+    }, res, next);
+    return null;
+  }
+  return as;
+};
+
+exports.multitxs = function (req, res, next) {
+  var iFrom = req.query.from;
+  var iTo = req.query.to;
+
+  var as = getAddrs(req, res, next);
+  if (as) {
+    var txs = [];
+    var nTotalItems = 0;
+    async.each(as, function (a, callback) {
+      a.update(function (err) {
+        var atxs;
+        if (err && !a.totalReceivedSat) callback(err);
+        nTotalItems += a.transactions.length;
+        if(iFrom){
+          atxs = a.transactions.splice(iFrom, iTo);
+        } else {
+          atxs = a.transactions;
+        }
+        txs = txs.concat(atxs);
+        callback();
+      });
+    }, function (err) { // finished callback
+      if (err) return common.handleErrors(err, res);
+      async.mapSeries(txs, getTransaction, function (err, results) {
+        if (err) {
+          console.log(err);
+          res.status(404).send('TX not found');
+        }
+        results.sort(function (aaa, bbb) {
+          var aa = parseInt(aaa.time);
+          var bb = parseInt(bbb.time);
+          if (aa < bb) return 1;
+          if (aa > bb) return -1;
+          return 0;
+        });
+        res.jsonp({
+          totalItems: nTotalItems,
+          from: iFrom,
+          to: iTo,
+          items: results.splice(iFrom, iTo)
+        });
+      });
+    });
+  }
+}

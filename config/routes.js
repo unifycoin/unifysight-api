@@ -27,6 +27,8 @@ module.exports = function(app) {
   app.get(apiPrefix + '/txs', transactions.list);
   app.get(apiPrefix + '/ranking', transactions.ranking);
   app.post(apiPrefix + '/tx/send', transactions.send);
+  app.get(apiPrefix + '/addrs/:addrs/txs', transactions.multitxs);
+  app.post(apiPrefix + '/addrs/txs', transactions.multitxs);
 
   // Address routes
   var addresses = require('../app/controllers/addresses');
