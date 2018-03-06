@@ -245,7 +245,7 @@ exports.multitxs = function (req, res, next) {
         var atxs;
         if (err && !a.totalReceivedSat) callback(err);
         nTotalItems += a.transactions.length;
-        if(iFrom){
+        if (iFrom) {
           atxs = a.transactions.splice(iFrom, iTo);
         } else {
           atxs = a.transactions;
@@ -267,13 +267,55 @@ exports.multitxs = function (req, res, next) {
           if (aa > bb) return -1;
           return 0;
         });
+
+        var ntxs = results.splice(iFrom, iTo);
+
         res.jsonp({
           totalItems: nTotalItems,
           from: iFrom,
           to: iTo,
-          items: results.splice(iFrom, iTo)
+          items: ntxs
         });
       });
     });
   }
 }
+
+var getTransactionForUtxo = function (utxo, cb) {
+  var txid = utxo.txid;
+  tDb.fromIdWithInfo(txid, function (err, tx) {
+    if (err) console.log(err);
+
+    if (!tx || !tx.info) {
+      console.log('[transactions.js.48]:: TXid %s not found in RPC. CHECK THIS.', txid);
+      return ({ txid: txid });
+    }
+    var nutxo = utxo;
+    nutxo.confirmations = tx.info.confirmations;
+    nutxo.satoshis = parseFloat(nutxo.amount) * 1e8;
+    return cb(null, nutxo);
+  });
+};
+
+exports.multiutxo = function (req, res, next) {
+  var as = getAddrs(req, res, next);
+  if (as) {
+    var utxos = [];
+    async.each(as, function (a, callback) {
+      a.update(function (err) {
+        if (err) callback(err);
+        utxos = utxos.concat(a.unspent);
+        callback();
+      }, { onlyUnspent: 1, ignoreCache: req.param('noCache') });
+    }, function (err) { // finished callback
+      if (err) return common.handleErrors(err, res);
+      async.mapSeries(utxos, getTransactionForUtxo, function (err, results) {
+        if (err) {
+          console.log(err);
+          res.status(404).send('TX not found');
+        }
+        res.jsonp(results);
+      });
+    });
+  }
+};

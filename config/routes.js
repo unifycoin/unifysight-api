@@ -29,13 +29,15 @@ module.exports = function(app) {
   app.post(apiPrefix + '/tx/send', transactions.send);
   app.get(apiPrefix + '/addrs/:addrs/txs', transactions.multitxs);
   app.post(apiPrefix + '/addrs/txs', transactions.multitxs);
+  app.get(apiPrefix + '/addrs/:addrs/utxo', transactions.multiutxo);
+  app.post(apiPrefix + '/addrs/utxo', transactions.multiutxo);
 
   // Address routes
   var addresses = require('../app/controllers/addresses');
   app.get(apiPrefix + '/addr/:addr', addresses.show);
   app.get(apiPrefix + '/addr/:addr/utxo', addresses.utxo);
-  app.get(apiPrefix + '/addrs/:addrs/utxo', addresses.multiutxo);
-  app.post(apiPrefix + '/addrs/utxo', addresses.multiutxo);
+  app.get(apiPrefix + '/addrs/:addrs/nutxo', addresses.multiutxo);
+  app.post(apiPrefix + '/addrs/nutxo', addresses.multiutxo);
 
   // Address property routes
   app.get(apiPrefix + '/addr/:addr/balance', addresses.balance);
