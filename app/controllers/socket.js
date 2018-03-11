@@ -48,10 +48,28 @@ var fullTx = function(tx) {
   t.valueOut = (valueOut.toFixed(8) / util.COIN);
   return t;
 };
+/*
+* by hms
+*/
+var fullTxEx = function(tx) {
+  var t = {
+    txid: tx.txid,
+    size: tx.size,
+    vout: tx.vout,
+  };
+  // Outputs
+  var valueOut = 0;
+  tx.vout.forEach(function(o) {
+    valueOut += o.valueSat;
+  });
+
+  t.valueOut = (valueOut.toFixed(8) / util.COIN);
+  return t;
+};
 
 module.exports.broadcastTx = function(tx) {
   if (ios) {
-    var t = (typeof tx === 'string') ? simpleTx(tx) : fullTx(tx);
+    var t = (typeof tx === 'string') ? simpleTx(tx) : fullTxEx(tx); // by hms
     ios.sockets.in('inv').emit('tx', t);
   }
 };
